@@ -1,0 +1,114 @@
+/* app/assets/stylesheets/custom.css */
+
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Topics styles */
+.topic-container {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.topic-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.topic-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Posts styles */
+.post-container {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.post-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Super button styles */
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #fff;
+}
+
+.btn-show {
+    background-color: #007bff; /* Blue color */
+
+
+}
+
+.btn-edit {
+    background-color: #28a745; /* Green color */
+}
+
+.btn-delete {
+    background-color: #dc3545; /* Red color */
+}
+
+/* Forms styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}

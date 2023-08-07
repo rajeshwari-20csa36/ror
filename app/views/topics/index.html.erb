@@ -1,0 +1,16 @@
+<h1>All Topics</h1>
+
+<% @topics.each do |topic| %>
+  <div class="topic-container">
+    <div class="topic-header">
+      <h2><%= link_to topic.name, topic_posts_path(topic) %></h2>
+      <div class="topic-actions">
+        <%= link_to 'Show', topic_path(topic), class: 'btn btn-show' %>
+        <%= link_to 'Edit', edit_topic_path(topic), class: 'btn btn-edit' %>
+        <%= button_to 'Delete', topic_path(topic), method: :delete, data: { confirm: 'Are you sure you want to delete this topic?' }, class: 'btn btn-delete' %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<%= link_to 'New Topic', new_topic_path, class: 'btn btn-show' %>

@@ -1,0 +1,23 @@
+<br>
+<h2><%=@post.comments.count %>&nbsp;Comments</h2>
+<p><%= @comment.body %></p>
+
+<p>
+  <%= form.label :Comment %><br>
+  <%= form.text_area :body %>
+</p>
+<p>
+  <%= form.submit %>
+</p>
+
+<% @post.comments.each do |comment| %>
+  <p>
+    <%= comment.body %>
+    <br>
+    <br>
+    <% if can? :destroy,comment %>
+      <%= link_to "Destroy Comment", [comment.post, comment], data: { turbo_method: :delete, turbo_confirm: "Are you sure?"} %>
+    <%end %>
+  </p>
+  <hr>
+<% end %>

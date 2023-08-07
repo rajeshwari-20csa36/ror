@@ -1,0 +1,74 @@
+<div class="post-container">
+  <h2><%= @post.title %></h2>
+  <p><%= @post.content %></p>
+  <h3>Comments:</h3>
+  <% @comments.each do |comment| %>
+    <p><%= comment.body %></p>
+  <% end %>
+  <h3>Tags:</h3>
+  <% if @post.tags.any? %>
+    <% @post.tags.each do |tag| %>
+      <span class="tag"><%= tag.name %></span>
+    <% end %>
+  <% else %>
+    <p>No tags for this post.</p>
+  <% end %>
+  <div class="post-actions">
+    <%= link_to 'Edit', edit_topic_post_path(@post.topic, @post), class: 'btn btn-edit' %>
+    <%= button_to 'Delete', topic_post_path(@post.topic, @post), method: :delete, data: { confirm: 'Are you sure you want to delete this post?' }, class: 'btn btn-delete' %>
+  </div>
+</div><br>
+<h2>Add Comment</h2>
+<%= form_with(model: Comment.new, url: post_comments_path(@post), local: true) do |form| %>
+  <%= form.text_area :body, placeholder: 'Type your comment here...' %>
+  <%= form.submit 'Submit' %>
+<% end %>
+
+<br>
+
+<h3>Rating's Section</h3>
+<br>
+<hr>
+<div>
+  <%= form_with(model: [@post, @post.ratings.build], url: post_ratings_path(@post)) do |f| %>
+    <%= f.radio_button :value, 1 %>
+    <img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" height="20" width="20" alt="star 1">
+    <%= f.radio_button :value, 2 %>
+    <img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" height="20" width="20" alt="star 2">
+    <%= f.radio_button :value, 3 %>
+    <img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" height="20" width="20" alt="star 3">
+    <%= f.radio_button :value, 4 %>
+    <img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" height="20" width="20" alt="star 4">
+    <%= f.radio_button :value, 5 %>
+    <img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" height="20" width="20" alt="star 5">
+    &nbsp;&nbsp;
+    <%= f.submit 'Submit Rating', class: 'btn btn-show' %>
+  <% end %>
+
+  <hr>
+  <% (1..5).each do |values| %>
+    <div class="rating">
+      <% if @ratings[values].present? %>
+        <h6><%= pluralize(@ratings[values], 'Rating') %> for <%= values %> Stars</h6>
+      <% else %>
+        No ratings for <%= values %> stars
+      <% end %>
+    </div>
+  <% end %>
+  <br>
+
+  <h4><img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" height="20" width="20" alt="star"> Average Ratings <img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" height="20" width="20" alt="star"></h4>
+  <% a = @post.ratings.average(:value) %>
+
+  <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= a.to_i %></h4>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <% a.to_i.times do %>
+    <img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" height="20" width="20" alt="star">
+  <% end %>
+</div>
+
+<%= link_to 'Back', topic_path(@post.topic), class: 'btn btn-show' %>
+
+
+
+

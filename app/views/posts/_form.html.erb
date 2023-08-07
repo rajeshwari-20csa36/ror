@@ -1,0 +1,33 @@
+<%= form_with(model: post, url: topic_posts_path(@topic), local: true) do |form| %>
+  <% if post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
+
+      <ul>
+        <% post.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :title, class: 'form-label' %>
+    <%= form.text_field :title, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :content, class: 'form-label' %>
+    <%= form.text_area :content, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :tags, class: 'form-label' %>
+    <%= form.text_field :tags, value: post.tags.map(&:name).join(",") %>
+  </div>
+
+
+  <div class="form-group">
+    <%= form.submit 'Create Post', class: 'btn btn-edit' %>
+  </div>
+<% end %>
