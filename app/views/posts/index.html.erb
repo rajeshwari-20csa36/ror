@@ -19,7 +19,7 @@
     </div>
 
     <h3>Rating's Section:</h3>
-    <div>
+    <div class="ratings-section">
       <% (1..5).each do |values| %>
         <div class="rating">
           <% if post.ratings.where(value: values).any? %>
@@ -34,7 +34,7 @@
   </div>
 <% end %>
 
-<div>
+<div class="back-to-topics">
   <%= link_to 'Back to Topics', topics_path, class: 'btn btn-show' %>
   <%= will_paginate(@posts) %>
 </div>

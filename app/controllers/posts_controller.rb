@@ -1,9 +1,10 @@
 
 require "will_paginate"
 class PostsController < ApplicationController
-  before_action :set_topic, only: [:index, :show, :new, :create, :edit, :update, :destroy]
-  before_action :set_post, only:  [:index, :show, :new, :create, :edit, :update, :destroy]
+  before_action :set_topic, only: [ :show, :edit, :update, :destroy]
+  before_action :set_post, only:  [:show, :edit, :update, :destroy]
 
+  before_action :authenticate_user!
   def index
     if params[:topic_id].present?
       @topic = Topic.find(params[:topic_id])
@@ -21,15 +22,19 @@ class PostsController < ApplicationController
     @ratings = @post.ratings.group(:value).count
   end
 
+  def mark_as_read
+    @post = Post.find(params[:id])
+    current_user.read_posts << @post
+    head :ok
+  end
 
-
-  # GET /topics/:topic_id/posts/:id/edit
   def edit
     @topic = Topic.find(params[:topic_id])
     @post = @topic.posts.find(params[:id])
+    authorize! :update, @post
   end
 
-  # POST /topics/:topic_id/posts
+
   def new
     @topic = Topic.find(params[:topic_id])
     @posts = Post.all.includes(:comments)
@@ -37,20 +42,20 @@ class PostsController < ApplicationController
 
   end
 
-  # POST /topics/:topic_id/posts
   def create
-
+    @user = current_user
     @topic = Topic.find(params[:topic_id])
-    @post = @topic.posts.new(post_params)
+    @post = @topic.posts.new(post_params.merge(user_id: @user.id))
 
     if @post.save
+      if params[:post][:tags].present?
       create_or_delete_posts_tags(@post,params[:post][:tags])
+      end
       redirect_to topic_post_path(@topic, @post), notice: 'Post was successfully created.'
     else
       render :new
     end
   end
-  # PATCH/PUT /topics/:topic_id/posts/:id
 
   def update
     @topic = Topic.find(params[:topic_id])
@@ -65,34 +70,33 @@ class PostsController < ApplicationController
     end
   end
 
-  def create_rating
-    @post = Post.find(params[:post_id])
-    @rating = @post.ratings.create(rating_params)
-    redirect_to @post
-  end
+  # def create_rating
+  #   @post = Post.find(params[:post_id])
+  #   @rating = @post.ratings.create(rating_params)
+  #   redirect_to @post
+  # end
 
-
-
-  # DELETE /topics/:topic_id/posts/:id
   def destroy
     @post.destroy
     redirect_to topic_posts_path(@topic), notice: 'Post was successfully destroyed.'
   end
 
   private
-  def rating_params
-    params.require(:rating).permit(:value)
-  end
+  # def rating_params
+  #   params.require(:rating).permit(:value)
+  # end
   def set_topic
     @topic = Topic.find(params[:topic_id])
   end
 
   def set_post
-    @post = Post.find(params[:id])
+
+      @post = @topic.posts.find(params[:id])
+
   end
 
   def post_params
-    params.require(:post).permit(:title, :content, :topic_id, tags: [])
+    params.require(:post).permit(:title, :content, :topic_id, :image, tags: [])
   end
   def create_or_delete_posts_tags(post, tags)
     post.taggables.destroy_all

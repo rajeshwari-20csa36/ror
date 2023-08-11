@@ -1,5 +1,3 @@
-/* app/assets/stylesheets/custom.css */
-
 /* General styles */
 body {
     font-family: Arial, sans-serif;
@@ -45,6 +43,7 @@ a:hover {
 .topic-actions {
     display: flex;
     gap: 10px;
+    align-items: center;
 }
 
 /* Posts styles */
@@ -64,12 +63,19 @@ a:hover {
 .post-actions {
     display: flex;
     gap: 10px;
+    align-items: center;
 }
 
 .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 20px;
+}
+
+.post-image {
+    max-width: 100%; /* Adjust as needed */
+    height: auto;
 }
 
 /* Super button styles */
@@ -84,16 +90,43 @@ a:hover {
 
 .btn-show {
     background-color: #007bff; /* Blue color */
-
-
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 16px;
+    border-radius: 5px;
+    text-decoration: none;
 }
 
 .btn-edit {
     background-color: #28a745; /* Green color */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 16px;
+    border-radius: 5px;
+    text-decoration: none;
 }
 
 .btn-delete {
     background-color: #dc3545; /* Red color */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 16px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.btn-success {
+    background-color: #28a745; /* Green color */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 /* Forms styles */
@@ -103,6 +136,7 @@ a:hover {
 
 .form-label {
     font-weight: bold;
+    display: block;
 }
 
 .form-control {
@@ -111,4 +145,57 @@ a:hover {
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+/* Comments section styles */
+.comments-section {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
+.comment {
+    margin-bottom: 10px;
+}
+
+.error-messages {
+    color: red;
+    margin-bottom: 20px;
+}
+
+/* Ratings section styles */
+.ratings-heading {
+    margin-bottom: 20px;
+}
+
+.ratings-section {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
+.ratings-section form {
+    margin-bottom: 20px;
+}
+
+.rating {
+    margin-bottom: 10px;
+}
+
+.average-ratings {
+    margin-top: 10px;
+}
+
+/* Back to topics link style */
+.back-to-topics {
+    margin-top: 20px;
+}
+
+/* Tag edit styles */
+.tag-edit-heading {
+    margin-bottom: 20px;
+}
+
+.tag-edit-links {
+    margin-top: 20px;
 }

@@ -27,6 +27,10 @@
     <%= form.text_field :tags, value: @post.tags.map(&:name).join(","), class: 'form-control' %>
   </div>
 
+  <%= form.label :image, 'Upload Image' %>
+  <%= form.file_field :image %>
+
+
   <div class="form-group">
     <%= form.submit 'Update Post', class: 'btn btn-edit' %>
   </div>

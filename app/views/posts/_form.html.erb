@@ -26,6 +26,11 @@
     <%= form.text_field :tags, value: post.tags.map(&:name).join(",") %>
   </div>
 
+  <div class="form-group">
+    <%= form.label :image, class: 'form-label' %>
+    <%= form.file_field :image, class: 'form-control' %>
+  </div>
+
 
   <div class="form-group">
     <%= form.submit 'Create Post', class: 'btn btn-edit' %>

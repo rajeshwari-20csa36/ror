@@ -1,35 +1,55 @@
 <div class="post-container">
   <h2><%= @post.title %></h2>
+
   <p><%= @post.content %></p>
+
   <h3>Comments:</h3>
   <% @comments.each do |comment| %>
-    <p><%= comment.body %></p>
+    <p class="comment"><%= comment.body %></p>
   <% end %>
+
   <h3>Tags:</h3>
-  <% if @post.tags.any? %>
-    <% @post.tags.each do |tag| %>
-      <span class="tag"><%= tag.name %></span>
+  <div class="tags">
+    <% if @post.tags.any? %>
+      <% @post.tags.each do |tag| %>
+        <span class="tag"><%= tag.name %></span>
+      <% end %>
+    <% else %>
+      <p>No tags for this post.</p>
     <% end %>
-  <% else %>
-    <p>No tags for this post.</p>
-  <% end %>
+  </div>
+
   <div class="post-actions">
     <%= link_to 'Edit', edit_topic_post_path(@post.topic, @post), class: 'btn btn-edit' %>
     <%= button_to 'Delete', topic_post_path(@post.topic, @post), method: :delete, data: { confirm: 'Are you sure you want to delete this post?' }, class: 'btn btn-delete' %>
   </div>
-</div><br>
+
+  <div class="post-image">
+    <% if @post.image.attached? %>
+      <%= image_tag 'football.jpg', class: 'post-image' %>
+    <% end %>
+  </div>
+</div>
+
+<br>
+
 <h2>Add Comment</h2>
 <%= form_with(model: Comment.new, url: post_comments_path(@post), local: true) do |form| %>
-  <%= form.text_area :body, placeholder: 'Type your comment here...' %>
-  <%= form.submit 'Submit' %>
+  <%= form.text_area :body, placeholder: 'Type your comment here...', class: 'form-control' %>
+  <%= form.submit 'Submit', class: 'btn btn-success' %>
 <% end %>
 
 <br>
 
-<h3>Rating's Section</h3>
+<% unless current_user.read_posts.include?(@post) %>
+  <%= link_to "Mark as Read", mark_as_read_read_post_path(@post), method: :post %>
+<% end %>
+<br>
+
+<h3 class="ratings-heading">Rating's Section</h3>
 <br>
 <hr>
-<div>
+<div class="ratings-section">
   <%= form_with(model: [@post, @post.ratings.build], url: post_ratings_path(@post)) do |f| %>
     <%= f.radio_button :value, 1 %>
     <img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" height="20" width="20" alt="star 1">
@@ -44,7 +64,6 @@
     &nbsp;&nbsp;
     <%= f.submit 'Submit Rating', class: 'btn btn-show' %>
   <% end %>
-
   <hr>
   <% (1..5).each do |values| %>
     <div class="rating">
@@ -56,19 +75,13 @@
     </div>
   <% end %>
   <br>
-
   <h4><img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" height="20" width="20" alt="star"> Average Ratings <img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" height="20" width="20" alt="star"></h4>
   <% a = @post.ratings.average(:value) %>
-
-  <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= a.to_i %></h4>
+  <h4 class="average-ratings">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= a.to_i %></h4>
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <% a.to_i.times do %>
     <img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" height="20" width="20" alt="star">
   <% end %>
+
 </div>
-
 <%= link_to 'Back', topic_path(@post.topic), class: 'btn btn-show' %>
-
-
-
-

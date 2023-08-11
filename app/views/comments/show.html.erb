@@ -1,23 +1,24 @@
-<br>
-<h2><%=@post.comments.count %>&nbsp;Comments</h2>
-<p><%= @comment.body %></p>
+<div class="comments-section">
+  <h2><%= @post.comments.count %>&nbsp;Comments</h2>
+  <p><%= @comment.body %></p>
 
-<p>
-  <%= form.label :Comment %><br>
-  <%= form.text_area :body %>
-</p>
-<p>
-  <%= form.submit %>
-</p>
+  <%= form_with(model: @comment, url: post_comments_path(@post), local: true) do |form| %>
+    <p>
+      <%= form.label :Comment %><br>
+      <%= form.text_area :body %>
+    </p>
+    <p>
+      <%= form.submit %>
+    </p>
+  <% end %>
 
-<% @post.comments.each do |comment| %>
-  <p>
-    <%= comment.body %>
-    <br>
-    <br>
-    <% if can? :destroy,comment %>
-      <%= link_to "Destroy Comment", [comment.post, comment], data: { turbo_method: :delete, turbo_confirm: "Are you sure?"} %>
-    <%end %>
-  </p>
-  <hr>
-<% end %>
+  <% @post.comments.each do |comment| %>
+    <div class="comment">
+      <p><%= comment.body %></p>
+      <% if can? :destroy, comment %>
+        <%= link_to "Destroy Comment", [comment.post, comment], data: { turbo_method: :delete, turbo_confirm: "Are you sure?"} %>
+      <% end %>
+    </div>
+    <hr>
+  <% end %>
+</div>

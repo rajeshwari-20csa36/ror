@@ -1,6 +1,6 @@
-# config/routes.rb
 
 Rails.application.routes.draw do
+  devise_for :users
   root 'topics#index'
 
   resources :topics do
@@ -13,6 +13,12 @@ Rails.application.routes.draw do
 
   resources :posts do
     resources :ratings, only: [:create]
+  end
+
+  resources :posts do
+    member do
+      post :mark_as_read
+    end
   end
 
   resources :tags

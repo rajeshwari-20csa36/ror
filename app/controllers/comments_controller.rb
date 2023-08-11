@@ -1,7 +1,7 @@
 class CommentsController < ApplicationController
   before_action :set_post, only: [:create, :destroy]
   before_action :set_comment, only: [:show, :destroy]
-
+  before_action :authenticate_user!
   # GET /comments
   def index
     @comments = Comment.all
@@ -14,7 +14,7 @@ class CommentsController < ApplicationController
   # POST /posts/:post_id/comments
   def create
     @comment = @post.comments.new(comment_params)
-
+    @comment.user = current_user
     if @comment.save
       redirect_to topic_post_path(@post.topic, @post), notice: 'Comment was successfully added.'
     else
@@ -45,6 +45,6 @@ class CommentsController < ApplicationController
   end
 
   def comment_params
-    params.require(:comment).permit(:body)
+    params.require(:comment).permit(:body, :user_id)
   end
 end

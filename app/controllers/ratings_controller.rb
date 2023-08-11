@@ -1,6 +1,6 @@
 class RatingsController < ApplicationController
   before_action :set_post
-
+  before_action :authenticate_user!
   def create
     @post = Post.find(params[:post_id])
     @rating = @post.ratings.new(rating_params)
