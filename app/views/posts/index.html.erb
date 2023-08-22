@@ -18,19 +18,8 @@
       <%= button_to 'Delete', topic_post_path(post.topic, post), method: :delete, data: { confirm: 'Are you sure you want to delete this post?' }, class: 'btn btn-delete' %>
     </div>
 
-    <h3>Rating's Section:</h3>
-    <div class="ratings-section">
-      <% (1..5).each do |values| %>
-        <div class="rating">
-          <% if post.ratings.where(value: values).any? %>
-            <h6><%= pluralize(post.ratings.where(value: values).count, 'Rating') %> for <%= values %> Stars</h6>
-          <% else %>
-            No ratings for <%= values %> stars
-          <% end %>
-        </div>
-      <% end %>
-      <br>
-    </div>
+    <h3>Average Rating:</h3>
+    <p><%= post.ratings.average(:value).to_f.round(1) %> stars</p>
   </div>
 <% end %>
 

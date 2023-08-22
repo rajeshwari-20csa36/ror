@@ -7,6 +7,8 @@
   <% @comments.each do |comment| %>
     <p class="comment"><%= comment.body %></p>
   <% end %>
+  <p class="comment"><%= pluralize(@comments.count, 'Comment') %></p>
+
 
   <h3>Tags:</h3>
   <div class="tags">
@@ -41,9 +43,6 @@
 
 <br>
 
-<% unless current_user.read_posts.include?(@post) %>
-  <%= link_to "Mark as Read", mark_as_read_read_post_path(@post), method: :post %>
-<% end %>
 <br>
 
 <h3 class="ratings-heading">Rating's Section</h3>
@@ -75,13 +74,5 @@
     </div>
   <% end %>
   <br>
-  <h4><img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" height="20" width="20" alt="star"> Average Ratings <img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" height="20" width="20" alt="star"></h4>
-  <% a = @post.ratings.average(:value) %>
-  <h4 class="average-ratings">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= a.to_i %></h4>
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <% a.to_i.times do %>
-    <img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" height="20" width="20" alt="star">
-  <% end %>
-
 </div>
 <%= link_to 'Back', topic_path(@post.topic), class: 'btn btn-show' %>

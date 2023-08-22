@@ -15,5 +15,4 @@ class User < ApplicationRecord
   def mark_post_as_read(post)
     read_posts << post unless read_posts.include?(post)
   end
-
 end

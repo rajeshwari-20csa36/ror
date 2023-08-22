@@ -8,10 +8,13 @@ class PostsController < ApplicationController
   def index
     if params[:topic_id].present?
       @topic = Topic.find(params[:topic_id])
-      @posts = @topic.posts.paginate(page: params[:page])
+      @posts = @topic.posts.includes(:ratings, :comments).paginate(page: params[:page])
     else
-      @posts = Post.paginate(page: params[:page])
+      @posts = Post.includes(:ratings, :comments).paginate(page: params[:page])
     end
+
+    calculate_average_ratings
+    calculate_comments_count
   end
 
   def show
@@ -20,13 +23,18 @@ class PostsController < ApplicationController
     @comments = @post.comments
     @tags = @post.tags
     @ratings = @post.ratings.group(:value).count
+    current_user.mark_post_as_read(@post)
+
   end
 
-  def mark_as_read
-    @post = Post.find(params[:id])
-    current_user.read_posts << @post
-    head :ok
-  end
+  # app/controllers/posts_controller.rb
+
+    def mark_post_as_read
+      post = Post.find(params[:post_id])
+      current_user.read_posts << post unless current_user.read_posts.include?(post)
+      render json: { success: true }
+    end
+
 
   def edit
     @topic = Topic.find(params[:topic_id])
@@ -39,7 +47,6 @@ class PostsController < ApplicationController
     @topic = Topic.find(params[:topic_id])
     @posts = Post.all.includes(:comments)
     @post = @topic.posts.new
-
   end
 
   def create
@@ -70,11 +77,6 @@ class PostsController < ApplicationController
     end
   end
 
-  # def create_rating
-  #   @post = Post.find(params[:post_id])
-  #   @rating = @post.ratings.create(rating_params)
-  #   redirect_to @post
-  # end
 
   def destroy
     @post.destroy
@@ -82,9 +84,6 @@ class PostsController < ApplicationController
   end
 
   private
-  # def rating_params
-  #   params.require(:rating).permit(:value)
-  # end
   def set_topic
     @topic = Topic.find(params[:topic_id])
   end
@@ -103,6 +102,21 @@ class PostsController < ApplicationController
     tags = tags.strip.split(',')
     tags.each do |tag|
       post.tags << Tag.find_or_create_by(name: tag)
+    end
+  end
+  def calculate_average_ratings
+    @average_ratings = {}
+    (@posts || []).each do |post|
+      total_ratings = post.ratings.count
+      sum_ratings = post.ratings.sum(:value)
+      @average_ratings[post.id] = total_ratings.zero? ? 0 : sum_ratings.to_f / total_ratings
+    end
+  end
+
+  def calculate_comments_count
+    @comments_count = {}
+    (@posts || []).each do |post|
+      @comments_count[post.id] = post.comments.count
     end
   end
 

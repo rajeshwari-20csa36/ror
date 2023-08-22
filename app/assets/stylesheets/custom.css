@@ -199,3 +199,8 @@ a:hover {
 .tag-edit-links {
     margin-top: 20px;
 }
+.post-container.unread {
+    border-color: #FFD700;
+    background-color: #FFFFE0;
+
+}

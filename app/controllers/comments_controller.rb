@@ -2,6 +2,7 @@ class CommentsController < ApplicationController
   before_action :set_post, only: [:create, :destroy]
   before_action :set_comment, only: [:show, :destroy]
   before_action :authenticate_user!
+
   # GET /comments
   def index
     @comments = Comment.all

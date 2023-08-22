@@ -2,7 +2,6 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-
     if true
       can :update, Post do |post|
         post.user == user
@@ -12,7 +11,7 @@ class Ability
         post.user == user
       end
 
-      can :destroy, Comment do |post|
+      can :destroy,  Comment do |post|
         post.user == user
       end
 
@@ -20,6 +19,5 @@ class Ability
       can :create, Comment
 
     end
-
   end
 end
