@@ -1,24 +1,11 @@
-<div class="comments-section">
-  <h2><%= @post.comments.count %>&nbsp;Comments</h2>
-  <p><%= @comment.body %></p>
 
-  <%= form_with(model: @comment, url: post_comments_path(@post), local: true) do |form| %>
-    <p>
-      <%= form.label :Comment %><br>
-      <%= form.text_area :body %>
-    </p>
-    <p>
-      <%= form.submit %>
-    </p>
-  <% end %>
-
-  <% @post.comments.each do |comment| %>
-    <div class="comment">
-      <p><%= comment.body %></p>
-      <% if can? :destroy, comment %>
-        <%= link_to "Destroy Comment", [comment.post, comment], data: { turbo_method: :delete, turbo_confirm: "Are you sure?"} %>
-      <% end %>
+  <h3>Comments rating:</h3>
+  <% @comments.each do |comment| %>
+    <p class="comment"><%= comment.body %></p>
+    <div class="comment-ratings">
+      <%= render partial: 'user_comment_ratings/form', locals: { comment: @comment } %>
+      <%= render partial: 'user_comment_ratings/index', locals: { comment: @comment } %>
     </div>
-    <hr>
   <% end %>
-</div>
+  <p class="comment"><%= pluralize(@comments.count, 'Comment') %></p>
+<%= link_to 'Back', topic_path(@post.topic), class: 'btn btn-show' %>

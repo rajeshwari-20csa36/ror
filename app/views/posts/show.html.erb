@@ -1,14 +1,17 @@
 <div class="post-container">
   <h2><%= @post.title %></h2>
-
   <p><%= @post.content %></p>
 
   <h3>Comments:</h3>
   <% @comments.each do |comment| %>
-    <p class="comment"><%= comment.body %></p>
+    <div class="comment">
+      <p class="comment-body"><%= comment.body %></p>
+
+      <%= render 'user_comment_ratings/form', comment: comment %>
+      <%= render 'user_comment_ratings/index', comment: comment %>
+    </div>
   <% end %>
   <p class="comment"><%= pluralize(@comments.count, 'Comment') %></p>
-
 
   <h3>Tags:</h3>
   <div class="tags">
@@ -36,9 +39,14 @@
 <br>
 
 <h2>Add Comment</h2>
-<%= form_with(model: Comment.new, url: post_comments_path(@post), local: true) do |form| %>
-  <%= form.text_area :body, placeholder: 'Type your comment here...', class: 'form-control' %>
-  <%= form.submit 'Submit', class: 'btn btn-success' %>
+<%= form_with(model: Comment.new, url: topic_post_comments_path(@post.topic, @post), local: true) do |form| %>
+  <div class="field">
+    <%= form.label :body %>
+    <%= form.text_area :body, placeholder: 'Type your comment here...', class: 'form-control' %>
+  </div>
+  <div class="actions">
+    <%= form.submit 'Submit', class: 'btn btn-success' %>
+  </div>
 <% end %>
 
 <br>
@@ -49,7 +57,7 @@
 <br>
 <hr>
 <div class="ratings-section">
-  <%= form_with(model: [@post, @post.ratings.build], url: post_ratings_path(@post)) do |f| %>
+  <%= form_with(model: [@post, @post.ratings.build], url: topic_post_ratings_path(@post.topic, @post), local: true) do |f| %>
     <%= f.radio_button :value, 1 %>
     <img src="https://cdn-icons-png.flaticon.com/512/477/477406.png" height="20" width="20" alt="star 1">
     <%= f.radio_button :value, 2 %>
@@ -75,4 +83,5 @@
   <% end %>
   <br>
 </div>
+
 <%= link_to 'Back', topic_path(@post.topic), class: 'btn btn-show' %>

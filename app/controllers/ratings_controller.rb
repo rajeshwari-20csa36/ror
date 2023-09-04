@@ -4,7 +4,7 @@ class RatingsController < ApplicationController
   def create
     @post = Post.find(params[:post_id])
     @rating = @post.ratings.new(rating_params)
-
+    @user = current_user
     if @rating.save
       redirect_to topic_post_path(@post.topic_id, @post), notice: 'Rating was successfully created.'
     else
@@ -19,6 +19,6 @@ class RatingsController < ApplicationController
   end
 
   def rating_params
-    params.require(:rating).permit(:value)
+    params.require(:rating).permit(:value).merge(:user_id)
   end
 end

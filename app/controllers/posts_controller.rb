@@ -18,7 +18,7 @@ class PostsController < ApplicationController
   end
 
   def show
-    @post = Post.find(params[:id])
+    @post = Post.includes(:comments, :tags, :ratings, :read_by_users).find(params[:id])
     @topic = @post.topic
     @comments = @post.comments
     @tags = @post.tags
@@ -26,14 +26,6 @@ class PostsController < ApplicationController
     current_user.mark_post_as_read(@post)
 
   end
-
-  # app/controllers/posts_controller.rb
-
-    def mark_post_as_read
-      post = Post.find(params[:post_id])
-      current_user.read_posts << post unless current_user.read_posts.include?(post)
-      render json: { success: true }
-    end
 
 
   def edit
@@ -54,15 +46,20 @@ class PostsController < ApplicationController
     @topic = Topic.find(params[:topic_id])
     @post = @topic.posts.new(post_params.merge(user_id: @user.id))
 
-    if @post.save
-      if params[:post][:tags].present?
-      create_or_delete_posts_tags(@post,params[:post][:tags])
+    respond_to do |format|
+      if @post.save
+        if params[:post][:tags].present?
+          create_or_delete_posts_tags(@post, params[:post][:tags])
+        end
+        format.html { redirect_to topic_post_path(@topic, @post), notice: 'Post was successfully created.' }
+        format.js{ render 'posts/create'}
+      else
+        format.html { render :new }
+        format.js
       end
-      redirect_to topic_post_path(@topic, @post), notice: 'Post was successfully created.'
-    else
-      render :new
     end
   end
+
 
   def update
     @topic = Topic.find(params[:topic_id])
@@ -91,7 +88,7 @@ class PostsController < ApplicationController
   def set_post
 
       @post = @topic.posts.find(params[:id])
-
+      
   end
 
   def post_params

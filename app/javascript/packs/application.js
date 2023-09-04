@@ -7,8 +7,6 @@ Rails.start()
 Turbolinks.start()
 ActiveStorage.start()
 
-
-
 document.addEventListener("turbolinks:load", function() {
     $('.post.unread').on('click', function() {
         var postId = $(this).data('post-id');
@@ -20,6 +18,7 @@ document.addEventListener("turbolinks:load", function() {
             success: function(data) {
                 $('.post[data-post-id="' + postId + '"]').removeClass('unread');
             }
+          
         });
     });
 });

@@ -9,7 +9,7 @@ class TopicsController < ApplicationController
   # GET /topics/1
   def show
     @topic = Topic.find(params[:id])
-    @posts = @topic.posts.includes(:comments).paginate(page: params[:page])
+    @posts = @topic.posts.includes(:comments, :tags, :ratings, :read_by_users).paginate(page: params[:page])
 
   end
 

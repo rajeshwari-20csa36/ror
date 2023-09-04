@@ -2,7 +2,7 @@ class Post < ApplicationRecord
   self.per_page = 2
 
   # Validations
-  validates :title, presence: true
+  validates :title, presence: true, length: { maximum: 20 }
   validates :content, presence: true
   validates :topic, presence: true
 

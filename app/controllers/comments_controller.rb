@@ -10,6 +10,7 @@ class CommentsController < ApplicationController
 
   # GET /comments/:id
   def show
+
   end
 
   # POST /posts/:post_id/comments
@@ -49,3 +50,4 @@ class CommentsController < ApplicationController
     params.require(:comment).permit(:body, :user_id)
   end
 end
+

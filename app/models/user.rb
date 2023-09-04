@@ -11,6 +11,8 @@ class User < ApplicationRecord
   has_many :posts_users_read_statuses
   has_many :read_posts, through: :posts_users_read_statuses, source: :post, class_name: "Post"
 
+  has_one :user_comment_rating
+  has_one :comment, through: :user_comment_rating
 
   def mark_post_as_read(post)
     read_posts << post unless read_posts.include?(post)

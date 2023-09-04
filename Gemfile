@@ -56,3 +56,5 @@ gem 'will_paginate', '~> 3.3'
 gem 'will_paginate-bootstrap'
 gem 'devise'
 gem 'cancancan'
+gem 'bullet'
+
