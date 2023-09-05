@@ -22,7 +22,9 @@ class Post < ApplicationRecord
   # Active Storage attachment
   has_one_attached :image
   has_and_belongs_to_many :read_by_users, class_name: 'User', join_table: :posts_users_read_statuses
-
+  def update_rating_average
+    update(rating_average: ratings.average(:value))
+  end
 
 
 end

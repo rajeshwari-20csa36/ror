@@ -31,6 +31,7 @@ class PostsController < ApplicationController
     @topic = Topic.find(params[:topic_id])
     @post = @topic.posts.find(params[:id])
     authorize! :update, @post
+
   end
 
 

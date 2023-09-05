@@ -1,30 +1,33 @@
 class UserCommentRatingsController < ApplicationController
   before_action :authenticate_user!
+  before_action :find_comment
 
   def index
-    @comment = Comment.find(params[:comment_id])
     @ratings = @comment.user_comment_ratings
-  end
-
-  def create
-    @comment = Comment.find(params[:comment_id])
-    @rating = current_user.user_comment_ratings.find_by(comment_id: @comment.id)
-
-    if @rating.present?
-      @rating.update(rating: user_comment_ratings_params[:rating])
-      redirect_to  comment_ratings_path(@comment), notice: 'Rating added successfully.'
-    else
-      @rating = current_user.user_comment_ratings.create!(comment_id: @comment.id, rating: user_comment_ratings_params[:rating])
-      redirect_to  comment_ratings_path(@comment), notice: 'Rating added successfully.'
+    respond_to do |format|
+      format.html { head :no_content } # Return 204 No Content for HTML requests
+      format.json { render json: @ratings } # Render JSON for JSON requests
     end
   end
 
+  def create
+    @rating = current_user.user_comment_ratings.find_or_initialize_by(comment: @comment)
+    @rating.rating = user_comment_ratings_params[:rating]
 
-private
+    if @rating.save
+      redirect_to comment_ratings_path(@comment), notice: 'Rating added successfully.'
+    else
+      redirect_to comment_ratings_path(@comment), alert: 'Failed to add rating.'
+    end
+  end
 
+  private
+
+  def find_comment
+    @comment = Comment.find(params[:comment_id])
+  end
 
   def user_comment_ratings_params
-
-    params.require(:user_comment_rating).permit(:rating, :user_id, :comment_id)
- end
+    params.require(:user_comment_rating).permit(:rating)
+  end
 end

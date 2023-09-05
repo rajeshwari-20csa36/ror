@@ -18,7 +18,9 @@
       <div class="post-container <%= post_unread_indicator(post) %>">
         <h2><%= post.title %></h2>
         <p><%= post.content %></p>
+
         <h3>Comments:</h3>
+        <p>Comments Count: <%= post.comments_count %></p>
         <% if post.comments.any? %>
           <% post.comments.each do |comment| %>
             <p><%= comment.body %></p>
@@ -34,7 +36,9 @@
         </div>
         <h3>Average Rating:</h3>
         <p><%= post.ratings.average(:value).to_f.round(1) %> stars</p>
+        <p>Rating Average: <%= post.rating_average.to_f.round(1) %> stars</p>
       </div>
+
     <% end %>
   <% else %>
     <p>No posts found for this topic.</p>
