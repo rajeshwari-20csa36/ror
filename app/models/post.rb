@@ -1,5 +1,10 @@
 class Post < ApplicationRecord
   self.per_page = 2
+  scope :created_between, ->(from_date, to_date) {
+    from_date = from_date.to_date
+    to_date = to_date.to_date
+    where(created_at: from_date.beginning_of_day..to_date.end_of_day)
+  }
 
   # Validations
   validates :title, presence: true, length: { maximum: 20 }

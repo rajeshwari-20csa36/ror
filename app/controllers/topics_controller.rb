@@ -9,9 +9,16 @@ class TopicsController < ApplicationController
   # GET /topics/1
   def show
     @topic = Topic.find(params[:id])
-    @posts = @topic.posts.includes(:comments, :tags, :ratings, :read_by_users).paginate(page: params[:page])
 
+    from_date = params[:from_date] || 1.day.ago.to_date
+    to_date = params[:to_date] || Date.current
+
+    puts "From Date: #{from_date}, To Date: #{to_date}"
+    @posts = @topic.posts.created_between(from_date, to_date)
+                   .includes(:comments, :tags, :ratings, :read_by_users)
+                   .paginate(page: params[:page])
   end
+
 
   # GET /topics/new
   def new

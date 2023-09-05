@@ -13,8 +13,7 @@ class PostsController < ApplicationController
       @posts = Post.includes(:ratings, :comments).paginate(page: params[:page])
     end
 
-    calculate_average_ratings
-    calculate_comments_count
+
   end
 
   def show
@@ -101,21 +100,5 @@ class PostsController < ApplicationController
       post.tags << Tag.find_or_create_by(name: tag)
     end
   end
-  def calculate_average_ratings
-    @average_ratings = {}
-    (@posts || []).each do |post|
-      total_ratings = post.ratings.count
-      sum_ratings = post.ratings.sum(:value)
-      @average_ratings[post.id] = total_ratings.zero? ? 0 : sum_ratings.to_f / total_ratings
-    end
-  end
-
-  def calculate_comments_count
-    @comments_count = {}
-    (@posts || []).each do |post|
-      @comments_count[post.id] = post.comments.count
-    end
-  end
-
 
 end

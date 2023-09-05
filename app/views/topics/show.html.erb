@@ -3,6 +3,16 @@
 
   <%= link_to 'New Post', new_topic_post_path(@topic), class: 'btn btn-show' %>
 
+  <h2>Posts</h2>
+
+  <%= form_tag(topic_path(@topic), method: :get) do %>
+    <%= label_tag 'From Date:' %>
+    <%= date_field_tag :from_date %>
+    <%= label_tag 'To Date:' %>
+    <%= date_field_tag :to_date %>
+    <%= submit_tag 'Filter Posts' %>
+  <% end %>
+
   <% if @posts.any? %>
     <% @posts.each do |post| %>
       <div class="post-container <%= post_unread_indicator(post) %>">
