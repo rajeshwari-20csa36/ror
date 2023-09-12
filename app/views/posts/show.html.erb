@@ -55,6 +55,7 @@
 
 <h3 class="ratings-heading">Rating's Section</h3>
 <br>
+
 <hr>
 <div class="ratings-section">
   <%= form_with(model: [@post, @post.ratings.build], url: topic_post_ratings_path(@post.topic, @post), local: true) do |f| %>

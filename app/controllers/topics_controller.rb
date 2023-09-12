@@ -31,9 +31,12 @@ class TopicsController < ApplicationController
 
   # POST /topics
   def create
+
     @topic = Topic.new(topic_params)
 
     if @topic.save
+      # SignUpMailer.signup_confirmation(current_user).deliver_now
+      SignUpMailerJob.perform_later(current_user)
       redirect_to @topic, notice: 'Topic was successfully created.'
     else
       render :new

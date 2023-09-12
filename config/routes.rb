@@ -1,6 +1,11 @@
+require 'sidekiq/web'
 Rails.application.routes.draw do
   devise_for :users
   root 'topics#index'
+
+  authenticate :users do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   resources :topics do
     resources :posts do
